@@ -118,7 +118,7 @@ class System(object):
             "Make": True,
             "SYS-CONTROL": True
         }
-        self.password = "SYS"
+        self.password = "dff9fdcd7f67995869b44f1e288ccea5c4dbb90333ba2489fdf268d608168da4f9ebf60f51cc93ea548ae19d188ce1c5e399f484d3c9cd6f608f033aa84917e3" # Just type "SYS" ;D
         self.root = SYS_MAIN_STORAGE
         self.type = self.__class__.__name__
 

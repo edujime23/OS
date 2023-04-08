@@ -1,5 +1,6 @@
 import itertools
 from asyncio import run
+from hashlib import sha512
 from sys import stderr
 from time import sleep
 from typing import Any
@@ -25,12 +26,12 @@ class _main():
     def __init__(self, *args : list[Any], **kwargs : dict[Any, Any]):
         self.current_user : user_types.Base = None
         self.current_dir : file_system.Folder = None
-        self.loged : bool = False
+        self.logged : bool = False
         
     def login(self):
         global blue, red, green, white
         attempts = 0
-        while not self.loged:
+        while not self.logged:
             
             if attempts > 10:
                 print("Too many attempts")
@@ -38,6 +39,7 @@ class _main():
             
             username : str = str(input(f"{green}Username {white}> "))
             password : str = str(utils.secure_password_input(f"{red}Password {white}> "))
+            password = sha512(password.encode()).hexdigest()
 
             if username not in user_types.Users:
                 attempts += 1
@@ -51,7 +53,7 @@ class _main():
 
     # TODO Rename this here and in `login`
     def _extracted_from_login_13(self, username):
-        self.loged = True
+        self.logged = True
         _user = user_types.Users.get(username)
         self.current_user = _user
         self.current_dir = _user.root
@@ -61,9 +63,10 @@ class _main():
             
         
     def __call__(self, *args, **kwds):
-        None if self.loged else self.login()
         global blue, red, green, white
         while running:
+            if not self.logged:
+                self.login()
             print()
             # Use user variables in the prompt string
             prompt = f"{blue}┌──({red}root💀{self.current_user.name}{blue})-[{white}~{self.current_dir.get_folder_path() if self.current_dir != file_system.SYS_MAIN_STORAGE and not isinstance(self.current_dir, str) else str()}{blue}]\n└─{red}# {white}"
@@ -169,8 +172,9 @@ class _main():
                     print(f"Successfully created {username} as {user.__class__.__name__}")
 
         elif cmd == "logout":
-            self.logged = False
-            self.login()
+            while self.logged:
+                self.logged = False
+            return self.login()
 
         elif cmd in ["cls", "clear"]:
             print("\033[H\033[J", end="")

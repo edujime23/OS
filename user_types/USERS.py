@@ -1,4 +1,5 @@
 import typing
+from hashlib import sha512
 
 import file_system
 import user_types.Hierarchy as Hierarchy
@@ -28,6 +29,8 @@ def new(name : str, password : str = "", type : str = "UsEr"):
     """
     Creates a new user or admin
     """
+    
+    password=sha512(password.encode()).hexdigest()
 
     if name in Users:
         return "The user already exists"
