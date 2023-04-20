@@ -21,9 +21,8 @@ def secure_password_input(prompt=''):
             proxy_string[len(p_s)] = "\u2217"
             proxy_string.append(' ')
             #p_s += c.decode('cp1252', 'ignore')
-            p_s += c.decode('utf-8', 'ignore')
+            p_s += c
 
     stdout.write('\n')
-    print(p_s)
     return p_s
 
