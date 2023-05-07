@@ -195,6 +195,12 @@ class _main():
                 print("\n")
                 return
             
+        else:
+            if cmd and not cmd.isspace():
+                print(f"Command \"{cmd}\" not found.")
+            else:
+                print("Type a command.")
+            
     def List2Str(self, List: list[str]):
         return "" if not List or all(x.isspace() for x in List) else " ".join(List)
 
@@ -215,8 +221,6 @@ async def main_wrapper():
         manager.new_thread(func=main(), args=None, kwargs=None).run()
     except KeyboardInterrupt or Exit as e:
         pass
-    except Exception as e:
-        print(f"Exception occurred: {e}", file=sys.stderr)
     finally:
         #https://www.twitch.tv/ferxwe
         # always call close function when program terminates
