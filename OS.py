@@ -1,9 +1,14 @@
 import itertools
+import os.path as path
 from asyncio import run
 from hashlib import sha512
-from sys import stderr
+import sys
 from time import sleep
 from typing import Any
+from colorama import just_fix_windows_console
+from getpass import getpass
+
+just_fix_windows_console()
 
 import file_system
 import user_types
@@ -38,7 +43,7 @@ class _main():
                 raise Exit()
             
             username : str = str(input(f"{green}Username {white}> "))
-            password : str = str(utils.secure_password_input(f"{red}Password {white}> "))
+            password : str = str(getpass(f"{red}Password {white}> "))
             password = sha512(password.encode()).hexdigest()
 
             if username not in user_types.Users:
@@ -70,12 +75,11 @@ class _main():
             print()
             # Use user variables in the prompt string
             prompt = f"{blue}┌──({red}root💀{self.current_user.name}{blue})-[{white}~{self.current_dir.get_folder_path() if self.current_dir != file_system.SYS_MAIN_STORAGE and not isinstance(self.current_dir, str) else str()}{blue}]\n└─{red}# {white}"
-
-            command : str = str(input(prompt)) 
+            command : str = str(input(prompt))
             self.ProcessCommands(command=command)
             
     def ProcessCommands(self, command: str):
-        parts = command.split()
+        parts = command.split() if not command.isspace() and command else [""]
         cmd = parts[0].lower()
         args = parts[1:]
 
@@ -200,7 +204,7 @@ class _main():
         running = False
         print("Closing threads, tasks and processes.")
         print(default)
-        exit(0)
+        raise SystemExit
         
 main = _main()  
             
@@ -212,7 +216,7 @@ async def main_wrapper():
     except KeyboardInterrupt or Exit as e:
         pass
     except Exception as e:
-        print(f"Exception occurred: {e.args}", file=stderr)
+        print(f"Exception occurred: {e}", file=sys.stderr)
     finally:
         #https://www.twitch.tv/ferxwe
         # always call close function when program terminates

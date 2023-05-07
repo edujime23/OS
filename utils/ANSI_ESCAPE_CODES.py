@@ -3,6 +3,8 @@ from typing import NamedTuple, OrderedDict, Union, Callable, Any
 Color = NamedTuple('RGB', [('red', Union[int, float]), ('green', Union[int, float]), ('blue', Union[int, float])] )
 colors = {}
 
+# Need more colors?
+
 class Convertors(Color):
     @property
     def hex_format(self):
